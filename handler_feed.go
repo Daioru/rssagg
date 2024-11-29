@@ -22,6 +22,7 @@ func (apiCfg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Reques
 	err := decoder.Decode(&params)
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("Error parsing JSON %v", err))
+		return
 	}
 
 	feed, err := apiCfg.DB.CreateFeed(r.Context(), database.CreateFeedParams{
@@ -34,6 +35,7 @@ func (apiCfg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Reques
 	})
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("Couldn't create feed: %v", err))
+		return
 	}
 
 	respondWithJSON(w, 201, databaseFeedToFeed(feed))
@@ -43,6 +45,7 @@ func (apiCfg *apiConfig) handlerGetFeeds(w http.ResponseWriter, r *http.Request)
 	feeds, err := apiCfg.DB.GetFeeds(r.Context())
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("Couldn't get feeds: %v", err))
+		return
 	}
 
 	respondWithJSON(w, 201, databaseFeedsToFeeds(feeds))

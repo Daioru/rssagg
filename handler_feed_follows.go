@@ -22,6 +22,7 @@ func (apiCfg *apiConfig) handlerCreateFeedFollow(w http.ResponseWriter, r *http.
 	err := decoder.Decode(&params)
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("Error parsing JSON %v", err))
+		return
 	}
 
 	feedFollow, err := apiCfg.DB.CreateFeedFollows(r.Context(), database.CreateFeedFollowsParams{
@@ -33,6 +34,7 @@ func (apiCfg *apiConfig) handlerCreateFeedFollow(w http.ResponseWriter, r *http.
 	})
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("Couldn't create feed follow: %v", err))
+		return
 	}
 
 	respondWithJSON(w, 201, databaseFeedFollowToFeedFollow(feedFollow))
@@ -42,6 +44,7 @@ func (apiCfg *apiConfig) handlerGetFeedFollow(w http.ResponseWriter, r *http.Req
 	feedFollows, err := apiCfg.DB.GetFeedFollows(r.Context(), user.ID)
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("Couldn't get feed follow: %v", err))
+		return
 	}
 
 	respondWithJSON(w, 201, databaseFeedFollowsToFeedFollows(feedFollows))
